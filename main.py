@@ -2,10 +2,13 @@
 import funciones as fc
 
 usuarios = {}
-fc.cargar_usuarios()
+fc.cargar_datos()
 
+fc.archivo_usuarios()
+
+"""
 while True:
-    fc.mensaje_bienvenida() #llamada de funcion de la bienvenida
+    fc.mensaje_bienvenida() 
     opcion = input("Seleccione una opcion: ")
     
     if opcion == "1":
@@ -15,7 +18,7 @@ while True:
         print(msg)
         if exito:
             print("Bienvenido a la red social!")
-            break  # o continuar a la app principal
+            break  # o continuar 
     elif opcion == "2":
         nombre = input("Nombre: ")
         contraseña = input("Contraseña: ")
@@ -28,3 +31,4 @@ while True:
         break
     else:
         print("Opción inválida. Intente de nuevo.")
+"""

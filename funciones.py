@@ -7,52 +7,73 @@ def mensaje_bienvenida():
     print("****************************************")
     print("1. iniciar sesion")
     print("2. registrarse")
+    print
     print("3. salir")
 
-    
-# diccionario vacio para poder acceder a el e ir agregando
-usuarios = {}
 
-def cargar_usuarios():
-    with open("users.txt", "r", encoding="utf-8") as archivo:
+
+def archivo_usuarios():
+    with open ("users.txt", "r",encoding="utf-8") as archivo:
+        usuario = {}
+        nombre = ""
+        contraseña = ""
+        nombre = ""
+        contraseña=""
         for linea in archivo:
-            if ";" in linea:
-                nombre, contraseña = linea.strip().split(";")
+            for fila in linea:
+                if ";" in linea:
+                    nombre, contraseña = linea.split(";")
+                    usuario[nombre] = {
+                        "contraseña": contraseña
+                    }
+    return usuario
+
+print(archivo_usuarios())
+print()
+print()
+
+
+def cargar_datos():
+    usuarios = {}
+    nombre = None
+
+    with open("userData.txt", "r", encoding="utf-8") as archivo:
+        for linea in archivo:   # recorremos cada línea
+            linea = linea.strip()
+
+            # Si la línea tiene un * → nombre y amigos
+            if "*" in linea:
+                partes = linea[1:].split(":")   # quitamos el *
+                nombre = partes[0]              # el primer dato es el nombre
+                amigos = partes[1].split(",") if len(partes) > 1 else []  # después de : vienen los amigos
                 usuarios[nombre] = {
-                    "contraseña": contraseña,
-                    "amigos": [],
-                    "solicitudes": [],
+                    "amigos": amigos,
                     "gustos": [],
                     "mensajes": []
                 }
 
-def iniciar_sesion(nombre, contraseña, usuarios):
-     # ve si esta el nombre en el diciconario
-    if nombre in usuarios:
-        # ver si la contraseña son iguales
-        if usuarios[nombre]["contraseña"] == contraseña:
-            return True, "Sesión iniciada correctamente."
-        else:
-            return False, "Contraseña incorrecta."
-    else:
-        return False, "Usuario no registrado."
+            # Si la línea tiene { → gustos
+            if "{" in linea:
+                gustos = linea[1:-1].split(",")
+                usuarios[nombre]["gustos"] = gustos
 
-def registrar_usuario(nombre, contraseña, usuarios):
-    if not nombre.isalpha(): #verifica si es valido lo que ingresa el usuario
-        return False, "El nombre debe ser solo texto"
-    if nombre in usuarios and usuarios[nombre]["contraseña"] == contraseña:
-        return False, "El usuario ya está registrado con esa contraseña, iniciar sesion porfavor"
-    usuarios[nombre] = { # luego crea un diccionario con la clave nombre y se le da el nombre alas claves 
-        "contraseña": contraseña,#y lo demas es listas vacias
-        "amigos": [],
-        "solicitudes": [],
-        "gustos": [],
-        "mensajes": []
-    }# todo siendo un diccionario solo
-    # Guardar en archivo users.txt
-    with open("users.txt", "a", encoding="utf-8") as archivo:
-        archivo.write(f"{nombre};{contraseña}\n")
-    return True, "Usuario registrado correctamente."
+            # Si la línea tiene "El "  es mensajes
+            if "El " in linea:
+                usuarios[nombre]["mensajes"].append(linea)
+
+    return usuarios
+
+
+# Probar
+datos = cargar_datos()
+print(datos)
+
+
+    
+
+
+
+
 
 
 
